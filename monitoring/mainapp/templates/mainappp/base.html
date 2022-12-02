@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load static %}
+{% load leaflet_tags %}
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=10">
+         {% block stylesheets %}
+            {% include 'mainappp/includes/inc_stylesheets.html' %}
+         {% endblock stylesheets %}
+        <title>{% block title %}{% endblock %}</title>
+        {% leaflet_js %}
+    {% leaflet_css %}
+        {% block js %}
+            <script src="{% static 'js/map.js' %}"></script>
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+            {% block navbar %}
+{#                {% include 'mainapp/includes/inc__nav_bar.html' %}#}
+            {% endblock %}
+        </header>
+        <section class="main-content" >
+            {% block content %}{% endblock %}
+        </section>
+{#        {% include 'mainapp/includes/inc__footer.html' %}#}
+    </body>
+</html>

@@ -1,22 +1,25 @@
-from django.db import models
 from django.contrib.auth.models import User
-# from djgeojson.fields import PointField
+from django.db import models
+from django.contrib.gis.db import models
 
 
 class DataTransport(models.Model):
-    pass
+    fuel_level = models.FloatField(max_length=10000, blank=True, null=True)
+    voltage_level = models.FloatField(max_length=10000, blank=True, null=True)
 
-
-class DataCoordinates(models.Model):
-#     geom = PointField(blank=True, null=True)
-    pass
+    def __str__(self):
+        return f'{self.fuel_level} | {self.voltage_level}'
 
 
 class Trip(models.Model):
     start_time = models.DateTimeField(auto_now_add=True, verbose_name='start time')
     stop_time = models.DateTimeField(verbose_name='stop time', blank=True, null=True)
     distance = models.FloatField(verbose_name='distance trip', blank=True, null=True)
-    geo_data = models.ForeignKey(DataCoordinates, on_delete=models.CASCADE, verbose_name='data trip')
+    geom = models.LineStringField(verbose_name='trip track', blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.start_time.strftime("%H:%M %d.%m.%Y")} | {self.stop_time.strftime("%H:%M %d.%m.%Y")} | ' \
+               f'{self.distance}'
 
 
 class Transport(models.Model):
@@ -43,3 +46,29 @@ class Transport(models.Model):
     def __str__(self):
         return self.name
 
+
+class DataCoordinates(models.Model):
+    class Meta:
+        ordering = ['-add_datetime']
+
+    geom = models.PointField(srid=4326)
+    add_datetime = models.DateTimeField(verbose_name='time to add', auto_now_add=True, blank=True, null=True)
+    transport = models.ForeignKey(Transport, on_delete=models.PROTECT, blank=True, null=True)
+    data_for_points = models.ForeignKey(DataTransport, on_delete=models.CASCADE, blank=True, null=True)
+    velocity = models.FloatField(verbose_name='velocity', blank=True, null=True)
+    course = models.FloatField(verbose_name='course', blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.add_datetime.strftime("%H:%M %d.%m.%Y")} | {self.geom} | {self.transport}'
+
+    @property
+    def transport_name(self):
+        if self.transport:
+            return self.transport.name
+        return ''
+
+    @property
+    def transport_velocity(self):
+        if self.velocity:
+            return self.velocity
+        return ''
