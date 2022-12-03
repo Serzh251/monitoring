@@ -4,11 +4,19 @@ from django.contrib.gis.db import models
 
 
 class DataTransport(models.Model):
-    fuel_level = models.FloatField(max_length=10000, blank=True, null=True)
-    voltage_level = models.FloatField(max_length=10000, blank=True, null=True)
+    dut1 = models.FloatField(max_length=10000, blank=True, null=True)
+    dut2 = models.FloatField(max_length=10000, blank=True, null=True)
+    dut3 = models.FloatField(max_length=10000, blank=True, null=True)
+    dut4 = models.FloatField(max_length=10000, blank=True, null=True)
+    engine_left = models.CharField(max_length=300, blank=True, null=True)
+    engine_right = models.CharField(max_length=300, blank=True, null=True)
+    engine_aux1 = models.CharField(max_length=300, blank=True, null=True)
+    engine_aux2 = models.CharField(max_length=300, blank=True, null=True)
+    energy_params = models.CharField(max_length=300, blank=True, null=True)
+    params = models.CharField(max_length=300, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.fuel_level} | {self.voltage_level}'
+        return f'{self.dut1} | {self.dut2}'
 
 
 class Trip(models.Model):
@@ -36,7 +44,7 @@ class Transport(models.Model):
 
     name = models.CharField(max_length=200, verbose_name='name')
     description = models.CharField(max_length=300, verbose_name='description', blank=True, null=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='owner')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='owner', related_name='owner')
     type = models.CharField(max_length=5, choices=TYPE_CHOICES, default='SHIP', verbose_name='type')
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default='STOP', verbose_name='state')
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, verbose_name='trip', blank=True, null=True)
@@ -53,8 +61,9 @@ class DataCoordinates(models.Model):
 
     geom = models.PointField(srid=4326)
     add_datetime = models.DateTimeField(verbose_name='time to add', auto_now_add=True, blank=True, null=True)
-    transport = models.ForeignKey(Transport, on_delete=models.PROTECT, blank=True, null=True)
-    data_for_points = models.ForeignKey(DataTransport, on_delete=models.CASCADE, blank=True, null=True)
+    transport = models.ForeignKey(Transport, on_delete=models.PROTECT, blank=True, null=True, related_name='transport')
+    data_for_points = models.ForeignKey(DataTransport, on_delete=models.CASCADE, blank=True, null=True,
+                                        related_name='data_for_points')
     velocity = models.FloatField(verbose_name='velocity', blank=True, null=True)
     course = models.FloatField(verbose_name='course', blank=True, null=True)
 
