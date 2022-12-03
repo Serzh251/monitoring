@@ -32,6 +32,6 @@ def data_raw(request):
     parse_data = parse_wialon_data_to_dict(request.body.decode('UTF-8'))
     if parse_data['valid_data']:
         save_data_to_model(parse_data)
-        return HttpResponse(status=200)
+        return HttpResponse(content=parse_data['status_code'], status=200)
     else:
-        return HttpResponse(status=400)
+        return HttpResponse(content=parse_data['status_code'], status=400)

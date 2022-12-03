@@ -52,7 +52,11 @@ def send_package_to_server(host: str, payload: dict):
     """send input data to server"""
     import requests
     r = requests.post(host, data=payload)
-    print(r.status_code)
+    answer = r.content.decode()
+    if answer == '#ASD#1\r\n':
+        return True
+    elif answer == '#ASD#13\r\n':
+        return False
 
 
 lat = 4807.038

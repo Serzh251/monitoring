@@ -1,5 +1,6 @@
 import crc16
 from django.contrib.gis.geos import Point
+
 from mainapp.models import DataCoordinates
 
 
@@ -17,8 +18,10 @@ def parse_wialon_data_to_dict(data: str) -> dict:
         calc_crc = hex(crc16.crc16xmodem(payload_str.encode(encoding='utf-8')))
         if get_crc == calc_crc:
             data_dict['valid_data'] = True
+            data_dict['status_code'] = '#ASD#1\r\n'  # The package has been successfully registered.
         else:
             data_dict['valid_data'] = False
+            data_dict['status_code'] = '#ASD#13\r\n'  # error checksum
             return data_dict
         try:
             y = float(payload[2])
@@ -56,4 +59,3 @@ def save_data_to_model(data: dict):
         velocity=velocity,
         course=course
     )
-
