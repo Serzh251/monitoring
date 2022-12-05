@@ -1,5 +1,7 @@
 # monitoring
 This project for remote monitoring transport
+server receive data from remote client throught wialon protocol
+
 
 # setup GDAL library for wimdows 
 https://www.pointsnorthgis.ca/blog/geodjango-gdal-setup-windows-10/#install-osgeo4w

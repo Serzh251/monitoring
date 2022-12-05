@@ -1,6 +1,4 @@
-
-
-from mainapp.models import DataCoordinates, DataTransport
+from mainapp.models import DataCoordinates, DataTransport, Transport
 from mainapp.services.wialon import parse_short_msg, parse_long_msg
 
 
@@ -14,8 +12,22 @@ def parse_wialon_data_to_dict(data: str) -> dict:
     return {'valid_data': False}
 
 
+def check_auth(headers: dict):
+    """
+    check the transport in the database and authorize if any
+    """
+    imei = headers.get('imei')
+    password = headers.get('password')
+    transport = Transport.objects.filter(identifier=imei).first()
+    if transport and transport.password == password:
+        return {'status_code': '#AL#1\r\n', 'auth': True, 'transport': transport}
+    else:
+        return {'status_code': '#AL#01\r\n',  'auth': False}
+
+
 def save_data_to_model(data: dict):
     params_item = None
+    transport = data['transport']
     if data.get('params'):
         params_item = DataTransport.objects.create(**data['params'])
     coordinates = data.get('coordinates')
@@ -26,5 +38,6 @@ def save_data_to_model(data: dict):
         geom=coordinates,
         velocity=velocity,
         course=course,
-        data_for_points=params_item
+        data_for_points=params_item,
+        transport=transport
     )

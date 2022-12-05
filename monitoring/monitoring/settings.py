@@ -27,16 +27,16 @@ INSTALLED_APPS = [
     'leaflet',
     'djgeojson',
     'rest_framework',
+    'rest_framework.authtoken',
     'mainapp',
 ]
 
 CORS_ALLOWED_ORIGINS = [
    "http://localhost:",
    "http://localhost",
-   "http://localhost:8077",
+   "http://localhost:8066",
    "http://127.0.0.1",
-   "http://127.0.0.1:8099",
-   "http://127.0.0.1:8080",
+   "http://127.0.0.1:8066",
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -125,10 +125,11 @@ REST_FRAMEWORK = {
     #     'djangorestframework_camel_case.parser.CamelCaseJSONParser',
     # ],
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.BasicAuthentication',
-    #     'rest_framework.authentication.SessionAuthentication',
-    #     'rest_framework.authentication.TokenAuthentication',
-    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
-    # ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]
 }

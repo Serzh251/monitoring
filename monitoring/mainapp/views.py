@@ -1,14 +1,12 @@
 from django.http import HttpResponse
-from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
-from django.views.generic.base import View
 from djgeojson.views import GeoJSONLayerView
 from rest_framework.viewsets import ModelViewSet
 
 from mainapp.models import DataCoordinates, DataTransport
 from mainapp.serializer import DataCoordinatesSerializer
-from mainapp.services.parse_save_data import parse_wialon_data_to_dict, save_data_to_model
+from mainapp.services.parse_save_data import parse_wialon_data_to_dict, save_data_to_model, check_auth
 
 
 class MainView(TemplateView):
@@ -29,7 +27,11 @@ class GetdataView(ModelViewSet):
 
 @csrf_exempt
 def data_raw(request):
-    parse_data = parse_wialon_data_to_dict(request.body.decode('UTF-8'))
+    parse_data = check_auth(request.headers)
+    if not parse_data.get('auth'):
+        return HttpResponse(content=parse_data['status_code'], status=403)
+
+    parse_data.update(parse_wialon_data_to_dict(request.body.decode('UTF-8')))
     if parse_data['valid_data']:
         save_data_to_model(parse_data)
         return HttpResponse(content=parse_data['status_code'], status=200)

@@ -1,5 +1,3 @@
-
-
 def parse_mnea_string(data: str) -> dict:
     data_lst = data.split(',')
     data_dict = {}

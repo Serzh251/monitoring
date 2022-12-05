@@ -21,6 +21,7 @@ def parse_payload_gps(payload: list) -> dict:
         if payload[7] != 'NA': data_dict['course'] = round(float(payload[7]), 2)
     except ValueError:
         data_dict['valid_data'] = False
+        data_dict['status_code'] = '#AD#15\r\n'
         return data_dict
     return data_dict
 
@@ -85,6 +86,6 @@ def parse_long_msg(data: str) -> dict:
         data_dict['status_code'] = '#ASD#1\r\n'  # The package has been successfully registered.
     else:
         data_dict['valid_data'] = False
-        data_dict['status_code'] = '#ASD#13\r\n'  # error checksum
+        data_dict['status_code'] = '#AD#16\r\n'  # error checksum
         return data_dict
     return data_dict

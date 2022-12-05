@@ -19,17 +19,6 @@ class DataTransport(models.Model):
         return f'{self.dut1} | {self.dut2}'
 
 
-class Trip(models.Model):
-    start_time = models.DateTimeField(auto_now_add=True, verbose_name='start time')
-    stop_time = models.DateTimeField(verbose_name='stop time', blank=True, null=True)
-    distance = models.FloatField(verbose_name='distance trip', blank=True, null=True)
-    geom = models.LineStringField(verbose_name='trip track', blank=True, null=True)
-
-    def __str__(self):
-        return f'{self.start_time.strftime("%H:%M %d.%m.%Y")} | {self.stop_time.strftime("%H:%M %d.%m.%Y")} | ' \
-               f'{self.distance}'
-
-
 class Transport(models.Model):
     TYPE_CHOICES = [
         ('SHIP', 'ship'),
@@ -41,18 +30,30 @@ class Transport(models.Model):
         ('MOVE', 'move'),
         ('NO CONNECTION', 'no connection'),
     ]
-
     name = models.CharField(max_length=200, verbose_name='name')
     description = models.CharField(max_length=300, verbose_name='description', blank=True, null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='owner', related_name='owner')
     type = models.CharField(max_length=5, choices=TYPE_CHOICES, default='SHIP', verbose_name='type')
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default='STOP', verbose_name='state')
-    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, verbose_name='trip', blank=True, null=True)
     data = models.ForeignKey(DataTransport, on_delete=models.CASCADE, verbose_name='data transport',
                              blank=True, null=True)
+    identifier = models.CharField(verbose_name='identifier', max_length=200)
+    password = models.CharField(max_length=100, verbose_name='password')
 
     def __str__(self):
         return self.name
+
+
+class Trip(models.Model):
+    start_time = models.DateTimeField(auto_now_add=True, verbose_name='start time')
+    stop_time = models.DateTimeField(verbose_name='stop time', blank=True, null=True)
+    distance = models.FloatField(verbose_name='distance trip', blank=True, null=True)
+    geom = models.LineStringField(verbose_name='trip track', blank=True, null=True)
+    transport = models.ForeignKey(Transport, on_delete=models.PROTECT, verbose_name='transport')
+
+    def __str__(self):
+        return f'{self.start_time.strftime("%H:%M %d.%m.%Y")} | {self.stop_time.strftime("%H:%M %d.%m.%Y")} | ' \
+               f'{self.distance}'
 
 
 class DataCoordinates(models.Model):

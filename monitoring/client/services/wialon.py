@@ -1,5 +1,4 @@
 import crc16
-
 from monitoring.client.services.params import get_params
 from monitoring.client.services.parse_nmea import parse_mnea_string
 
@@ -44,3 +43,20 @@ def create_wialon_long_package(input_data: str) -> str:
 
     crc = hex(crc16.crc16xmodem(payload.encode(encoding='utf-8')))
     return f'#D#{payload}{crc}\r\n'
+
+
+# def login_to_server(host: str, imei: str, password: str) -> str:
+#     """function for login on wilaon server, return token
+#        example request:
+#         - #L#Protocol_version;IMEI;Password;CRC16\r\n
+#     """
+#     import requests
+#     payload = f''
+#     r = requests.post(host, data=payload)
+#     answer = r.content.decode()
+#     if answer == '#ASD#1\r\n':  # success package transaction
+#         pass
+#     elif answer == '#ASD#13\r\n' or answer == 'AD#16\r\n':  # error checksum
+#         pass
+#     elif answer == '#AD#15\r\n':  # bad additional params
+#         pass
