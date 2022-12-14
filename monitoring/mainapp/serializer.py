@@ -1,9 +1,11 @@
 from rest_framework.serializers import ModelSerializer
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
-from mainapp.models import DataCoordinates, DataTransport
+from mainapp.models import DataCoordinates, DataTransport, Trip, Transport
 
 
-class DataCoordinatesSerializer(ModelSerializer):
+class DataCoordinatesSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = DataCoordinates
-        fields = ('__all__')
+        geo_field = "geom"
+        fields = ('geom', 'velocity', 'transport')

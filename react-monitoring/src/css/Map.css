@@ -1,0 +1,10 @@
+@import url("~leaflet/dist/leaflet.css");
+@import 'antd/dist/reset.css';
+
+
+body,
+#root,
+.leaflet-container {
+  height: 100vh;
+  width: 100vw;
+}

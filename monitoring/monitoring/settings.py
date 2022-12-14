@@ -14,6 +14,13 @@ DB_PASSWORD = os.environ.get('DB_MONITORING_PASSWORD')
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CORS_ALLOWED_ORIGINS = [
+   "http://localhost:3000",
+   "http://localhost",
+   "http://localhost:8066",
+   "http://127.0.0.1",
+   "http://127.0.0.1:8066",
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -27,17 +34,12 @@ INSTALLED_APPS = [
     'leaflet',
     'djgeojson',
     'rest_framework',
+    'rest_framework_gis',
+    'rest_framework_swagger',
     'rest_framework.authtoken',
     'mainapp',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-   "http://localhost:",
-   "http://localhost",
-   "http://localhost:8066",
-   "http://127.0.0.1",
-   "http://127.0.0.1:8066",
-]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

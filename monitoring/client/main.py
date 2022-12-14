@@ -3,12 +3,14 @@ import random
 from monitoring.client.services.wialon import create_wialon_short_package, create_wialon_long_package
 host='http://127.0.0.1:8066/data_raw/'
 # host_token='http://127.0.0.1:8066/api-token-auth/'
-imei = '990012003416986'
+# imei = '990012003416986'
+imei = '356926099216182'
+# imei = '354809100949797'
 password = 'qwerty'
 # data = 'GPGGA,123519,4807.038,S,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47'
 # data = '$GPRMC,123519,A,4807.038,N,01131.000,E,022.4,084.4,230394,003.1,W*6A'
-lat = 4807.038
-lon = 1131.000
+lat = 6407.038
+lon = 4031.000
 lat += 0.001
 lon += 0.001
 velocity = random.randint(0, 100)

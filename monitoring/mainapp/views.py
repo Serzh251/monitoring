@@ -1,10 +1,12 @@
+from django.db.models import Max
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from djgeojson.views import GeoJSONLayerView
+from rest_framework import viewsets, generics
 from rest_framework.viewsets import ModelViewSet
-
-from mainapp.models import DataCoordinates, DataTransport
+from rest_framework.response import Response
+from mainapp.models import DataCoordinates, DataTransport, Transport, Trip
 from mainapp.serializer import DataCoordinatesSerializer
 from mainapp.services.parse_save_data import parse_wialon_data_to_dict, save_data_to_model, check_auth
 
@@ -22,11 +24,18 @@ class MapLayer(GeoJSONLayerView):
 
 class GetdataView(ModelViewSet):
     serializer_class = DataCoordinatesSerializer
-    queryset = DataCoordinates.objects.all()
+    transport_list = []
+    time_list = []
+    query = DataCoordinates.objects.values('transport_id').annotate(latest=Max('add_datetime'))
+    for i in query:
+        time_list.append(i['latest'])
+        transport_list.append(i['transport_id'])
+    queryset = DataCoordinates.objects.filter(transport_id__in=transport_list).filter(add_datetime__in=time_list)
 
 
 @csrf_exempt
 def data_raw(request):
+    """get requests with data from clients"""
     parse_data = check_auth(request.headers)
     if not parse_data.get('auth'):
         return HttpResponse(content=parse_data['status_code'], status=403)
