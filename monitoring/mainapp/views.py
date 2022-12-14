@@ -7,7 +7,7 @@ from rest_framework import viewsets, generics
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from mainapp.models import DataCoordinates, DataTransport, Transport, Trip
-from mainapp.serializer import DataCoordinatesSerializer
+from mainapp.serializer import DataCoordinatesSerializer, TransportListSerializer
 from mainapp.services.parse_save_data import parse_wialon_data_to_dict, save_data_to_model, check_auth
 from serialise_views import queryset_last_location
 
@@ -28,6 +28,12 @@ class GetLastLocationView(ModelViewSet):
     """Get last transport location"""
     serializer_class = DataCoordinatesSerializer
     queryset = queryset_last_location()
+
+
+class GetTransportListView(ModelViewSet):
+    """Get last transport location"""
+    serializer_class = TransportListSerializer
+    queryset = Transport.objects.all()
 
 
 @csrf_exempt

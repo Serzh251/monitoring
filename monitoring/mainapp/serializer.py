@@ -17,3 +17,10 @@ class DataCoordinatesSerializer(GeoFeatureModelSerializer):
             'velocity': instance.velocity,
             'add_datetime': instance.add_datetime,
         }
+
+
+class TransportListSerializer(ModelSerializer):
+    """get data transport list"""
+    class Meta:
+        model = Transport
+        fields = ('name', 'description', 'type')
