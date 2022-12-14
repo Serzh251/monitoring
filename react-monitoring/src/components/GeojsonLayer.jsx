@@ -32,8 +32,9 @@ export default class GeojsonLayer extends React.Component {
         {this.state.data.map(f => {
           return <GeoJSON key={f.properties.id} data={f} style={this.myStyle}>
              <Popup>
+              date time - {new Date(f.properties.add_datetime).toLocaleString()}<br/>
               velocity - {f.properties.velocity} km/h<br/>
-              {f.properties.transport}
+              transport - {f.properties.transport}
              </Popup>
           </GeoJSON>
         })}

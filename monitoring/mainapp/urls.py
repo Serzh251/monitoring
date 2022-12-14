@@ -3,12 +3,12 @@ from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
-from mainapp.views import MainView, GetdataView, MapLayer, data_raw
+from mainapp.views import MainView, GetLastLocationView, MapLayer, data_raw
 from mainapp.models import DataCoordinates
 
 app_name = 'mainapp'
 router = DefaultRouter()
-router.register('data_geo', GetdataView)
+router.register('last_location', GetLastLocationView)
 
 
 

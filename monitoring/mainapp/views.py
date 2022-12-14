@@ -9,9 +9,11 @@ from rest_framework.response import Response
 from mainapp.models import DataCoordinates, DataTransport, Transport, Trip
 from mainapp.serializer import DataCoordinatesSerializer
 from mainapp.services.parse_save_data import parse_wialon_data_to_dict, save_data_to_model, check_auth
+from serialise_views import queryset_last_location
 
 
 class MainView(TemplateView):
+    """main page no frontend"""
     template_name = 'mainappp/index.html'
     extra_context = {'title': 'Main'}
 
@@ -22,15 +24,10 @@ class MapLayer(GeoJSONLayerView):
     simplify = 0.5  # generalization
 
 
-class GetdataView(ModelViewSet):
+class GetLastLocationView(ModelViewSet):
+    """Get last transport location"""
     serializer_class = DataCoordinatesSerializer
-    transport_list = []
-    time_list = []
-    query = DataCoordinates.objects.values('transport_id').annotate(latest=Max('add_datetime'))
-    for i in query:
-        time_list.append(i['latest'])
-        transport_list.append(i['transport_id'])
-    queryset = DataCoordinates.objects.filter(transport_id__in=transport_list).filter(add_datetime__in=time_list)
+    queryset = queryset_last_location()
 
 
 @csrf_exempt

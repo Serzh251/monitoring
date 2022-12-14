@@ -68,7 +68,7 @@ class MapComponent extends React.Component {
         </div>
         
         {this.state.geojsonvisible && 
-          <GeojsonLayer url="http://127.0.0.1:8066/api/data_geo/" />
+          <GeojsonLayer url="http://127.0.0.1:8066/api/last_location/" />
         }
 
         <CoordInsert onllzChange={this.onCoordInsertChange} />
