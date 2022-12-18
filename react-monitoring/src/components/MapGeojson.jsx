@@ -1,7 +1,8 @@
 import React from "react";
 import L from 'leaflet';
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 import Basemap from './Basemaps';
+
 import GeojsonLayer from './GeojsonLayer';
 import CoordInsert from './CoordInsert';
 import '../css/Map.css';
@@ -15,9 +16,9 @@ class MapComponent extends React.Component {
     lng: 37.530865,
     zoom: 3,
     basemap: 'osm',
-
+    transport_list: [],
     geojsonvisible: false,
-    visibleModal: false,
+    openModal: false,
   };
 
   onCoordInsertChange = (lat, long, z) => {
@@ -67,19 +68,19 @@ class MapComponent extends React.Component {
             value={this.state.geojsonvisible} onChange={this.onGeojsonToggle} />
         </div>
         
-        {this.state.geojsonvisible && 
+        {/* {this.state.geojsonvisible &&  */}
           <GeojsonLayer url="http://127.0.0.1:8066/api/last_location/" />
-        }
+         {/* } */}
 
         <CoordInsert onllzChange={this.onCoordInsertChange} />
 
-        <Marker position={center}>
+        {/* <Marker position={center}>
           <Popup>
             Широта: {this.state.lat}<br/>
             Долгота: {this.state.lng}<br/>
             Масштаб: {this.state.zoom}
           </Popup>
-        </Marker>
+        </Marker> */}
       </MapContainer>
     );
   }

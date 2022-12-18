@@ -7,7 +7,7 @@ class CoordInsert extends React.Component {
     super(props);
 
     this.state = {
-      visibleModal: false,
+      openModal: false,
       latModal: 37.5,
       longModal: 50,
       zoomModal: 10,
@@ -17,21 +17,21 @@ class CoordInsert extends React.Component {
 
   showModal = () => {
     this.setState({
-      visibleModal: true,
+      openModal: true,
     });
   };
 
   handleOk = (e) => {
     this.props.onllzChange(this.state.latModal,this.state.longModal,this.state.zoomModal);
     this.setState({
-      visibleModal: false,
+      openModal: false,
     });
   };
 
   handleCancel = e => {
     console.log(e);
     this.setState({
-      visibleModal: false,
+      openModal: false,
     });
   };
 
@@ -65,7 +65,7 @@ class CoordInsert extends React.Component {
         </Button>
         <Modal
           title="Basic Modal"
-          visible={this.state.visibleModal}
+          open={this.state.openModal}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >

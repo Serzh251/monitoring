@@ -13,6 +13,7 @@ class DataCoordinatesSerializer(GeoFeatureModelSerializer):
 
     def get_properties(self, instance, fields):
         return {
+            'transport_id': instance.transport.id,
             'transport': instance.transport.name,
             'velocity': instance.velocity,
             'add_datetime': instance.add_datetime,
@@ -23,4 +24,4 @@ class TransportListSerializer(ModelSerializer):
     """get data transport list"""
     class Meta:
         model = Transport
-        fields = ('name', 'description', 'type')
+        fields = ('id', 'name', 'description', 'type')

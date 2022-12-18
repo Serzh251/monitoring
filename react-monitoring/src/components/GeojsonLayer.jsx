@@ -1,5 +1,6 @@
 import React from 'react';
-import { GeoJSON, FeatureGroup, Popup } from 'react-leaflet';
+import { FeatureGroup, Popup, Marker} from 'react-leaflet';
+import TransportList from './TransportList';
 import "../css/GeojsonLayer.css"
 
 export default class GeojsonLayer extends React.Component {
@@ -7,38 +8,49 @@ export default class GeojsonLayer extends React.Component {
     super(props);
 
     this.state = {
-      data: []
+      data: [],
+      show_data: []
     };
-
-    console.log('contructor');
   }
 
-  myStyle = () => {
-    return {
-      color: "green",
-      weight: 3,
-      opacity: 1,
-      fillColor: "red",
-      dashArray: '8 5'
+  onChoose = (e) => {
+    this.setState({
+      show_data: []
+    });  
+    if (e===0) {
+      this.setState({
+        show_data: this.state.data
+      });
+    }
+    else{
+      var lst = []
+      for (const el of this.state.data) {
+        if (el.properties.transport_id===e){
+          lst.push(el)
+        }
+      }
+      this.setState({
+        show_data: lst
+      });  
     }
   }
 
   render() {
-    console.log('render');
-
-    console.info(this.state.data);
     return (
       <FeatureGroup>
-        {this.state.data.map(f => {
-          return <GeoJSON key={f.properties.id} data={f} style={this.myStyle}>
-             <Popup>
+        
+        {this.state.show_data.map(f => {
+            return <Marker  key={f.properties.id} position={[f.geometry.coordinates[1], f.geometry.coordinates[0]]}>
+             <Popup >
               date time - {new Date(f.properties.add_datetime).toLocaleString()}<br/>
               velocity - {f.properties.velocity} km/h<br/>
               transport - {f.properties.transport}
              </Popup>
-          </GeoJSON>
+            </Marker>
         })}
+        <TransportList onChoose={this.onChoose}/>
       </FeatureGroup>
+      
     );
   }
 
@@ -46,12 +58,6 @@ export default class GeojsonLayer extends React.Component {
     if (this.props.url) {
       this.fetchData(this.props.url);
     }
-    console.log('did mount');
-  }
-
-  componentWillUnmount() {
-    console.log('will unmount');
-
   }
 
   fetchData(url) {
@@ -61,7 +67,8 @@ export default class GeojsonLayer extends React.Component {
       .then(r => r.json())
       .then(data => {
         this.setState({
-          data: data.features
+          data: data.features,
+          show_data: data.features
         });
       }, (error) => {
         // console.error(error);
