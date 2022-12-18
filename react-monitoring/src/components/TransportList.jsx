@@ -1,5 +1,5 @@
 import React from 'react';
-import "../css/TransportList.css";
+import "../static/css/TransportList.css";
 
 class TransportList extends React.Component {
   constructor(props) {

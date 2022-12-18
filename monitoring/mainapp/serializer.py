@@ -15,6 +15,7 @@ class DataCoordinatesSerializer(GeoFeatureModelSerializer):
         return {
             'transport_id': instance.transport.id,
             'transport': instance.transport.name,
+            'transport_type': instance.transport.type,
             'velocity': instance.velocity,
             'add_datetime': instance.add_datetime,
         }

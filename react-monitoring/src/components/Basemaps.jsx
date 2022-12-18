@@ -1,5 +1,5 @@
 import React from 'react';
-import "../css/Basemaps.css";
+import "../static/css/Basemaps.css";
 
 class Basemap extends React.Component {
   onChange = (e) => {

@@ -5,7 +5,7 @@ import Basemap from './Basemaps';
 
 import GeojsonLayer from './GeojsonLayer';
 import CoordInsert from './CoordInsert';
-import '../css/Map.css';
+import '../static/css/Map.css';
 
 // указываем путь к файлам marker
 L.Icon.Default.imagePath = "https://unpkg.com/leaflet@1.5.0/dist/images/";
